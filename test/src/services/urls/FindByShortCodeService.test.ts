@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { FindByShortCodeService } from '../../../src/services/urls/FindByShortCodeService.js';
-import { IUrlRepository } from '../../../src/repositories/interfaces/IUrlRepository.js';
-import { ICacheProvider } from '../../../src/cache/interfaces/ICacheProvider.js';
+import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
+import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
+import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
+
 
 describe('FindByShortCode Service', () => {
 	let findByShortCode: FindByShortCodeService;

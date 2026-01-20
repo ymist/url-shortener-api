@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { ICacheProvider } from '../../../src/cache/interfaces/ICacheProvider.js';
-import { IUrlRepository } from '../../../src/repositories/interfaces/IUrlRepository.js';
-import { ShortenUrlService } from '../../../src/services/urls/ShortenUrlService.js';
-import { generateSlug } from '../../../src/utils/generateSlug.js';
+import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
+import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
+import { ShortenUrlService } from '#src/services/urls/ShortenUrlService';
+import { generateSlug } from '#src/utils/generateSlug';
 
 describe('ShortenUrlService Service', () => {
 	let shortenUrlService: ShortenUrlService;

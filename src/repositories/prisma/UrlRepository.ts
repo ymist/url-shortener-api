@@ -1,5 +1,5 @@
 import { PrismaClient, Url } from '@prisma/client';
-import { IUrlRepository } from '../interfaces/IUrlRepository.js';
+import { IUrlRepository } from '../interfaces/IUrlRepository';
 
 export class UrlRepository implements IUrlRepository {
 	constructor(private prisma: PrismaClient) {}

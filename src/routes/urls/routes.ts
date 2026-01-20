@@ -1,12 +1,12 @@
+import { RedisCacheProvider } from '#src/cache/redis/RedisCacheProvider';
+import { FindByShortCodeController } from '#src/controllers/urls/FindByShortCodeController';
+import { ShortenUrlController } from '#src/controllers/urls/ShortenUrlController';
+import { prisma } from '#src/lib/prisma';
+import { redis } from '#src/lib/redis';
+import { UrlRepository } from '#src/repositories/prisma/UrlRepository';
+import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
+import { ShortenUrlService } from '#src/services/urls/ShortenUrlService';
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import { UrlRepository } from '../../repositories/prisma/UrlRepository.js';
-import { RedisCacheProvider } from '../../cache/redis/RedisCacheProvider.js';
-import { ShortenUrlService } from '../../services/urls/ShortenUrlService.js';
-import { FindByShortCodeService } from '../../services/urls/FindByShortCodeService.js';
-import { ShortenUrlController } from '../../controllers/urls/ShortenUrlController.js';
-import { FindByShortCodeController } from '../../controllers/urls/FindByShortCodeController.js';
-import { redis } from '../../lib/redis.js';
-import { prisma } from '../../lib/prisma.js';
 
 const urlRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 	// Setup dependencies

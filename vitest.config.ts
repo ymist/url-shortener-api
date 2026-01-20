@@ -1,50 +1,48 @@
-import { defineConfig } from 'vitest/config'
-import { resolve } from 'node:path'
+import path from 'node:path';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  test: {
-    // Ambiente Node.js para Fastify
-    environment: 'node',
+	resolve: {
+		alias: {
+			'#src': path.resolve(__dirname, './src'),
+		},
+	},
+	test: {
+		// Ambiente Node.js para Fastify
+		environment: 'node',
 
-    // Não usar globals - importar explicitamente test/expect
-    globals: false,
+		// Não usar globals - importar explicitamente test/expect
+		globals: true,
 
-    // Padrões de arquivos de teste
-    include: ['test/**/*.test.ts', 'test/**/*.spec.ts'],
-    exclude: ['node_modules', 'dist', 'coverage'],
+		// Padrões de arquivos de teste
+		include: ['test/**/*.{test,spec}.ts', 'test/**/*.{test,spec}.ts'],
 
-    // Timeout para testes de integração
-    testTimeout: 10000,
-    hookTimeout: 10000,
+		// Timeout para testes de integração
+		testTimeout: 10000,
+		hookTimeout: 10000,
 
-    // Cobertura com @vitest/coverage-v8
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html', 'lcov'],
-      reportsDirectory: './coverage',
-      include: ['src/**/*.ts'],
-      exclude: [
-        'src/**/*.test.ts',
-        'src/**/*.spec.ts',
-        'src/app.ts', // Entry point, muito fino para testar
-        'dist/**'
-      ],
-      // Thresholds mínimos de 70% conforme CLAUDE.md
-      thresholds: {
-        statements: 70,
-        branches: 70,
-        functions: 70,
-        lines: 70
-      }
-    },
+		// Cobertura com @vitest/coverage-v8
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'json', 'html', 'lcov'],
+			reportsDirectory: './coverage',
+			include: ['src/**/*.ts'],
+			exclude: [
+				'src/**/*.test.ts',
+				'src/**/*.spec.ts',
+				'src/app.ts', // Entry point, muito fino para testar
+				'dist/**',
+			],
+			// Thresholds mínimos de 70% conforme CLAUDE.md
+			thresholds: {
+				statements: 70,
+				branches: 70,
+				functions: 70,
+				lines: 70,
+			},
+		},
 
-    // Setup para carregar .env.test
-    setupFiles: ['./test/setup.ts']
-  },
-
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src')
-    }
-  }
-})
+		// Setup para carregar .env.test
+		setupFiles: ['./test/setup.ts'],
+	},
+});

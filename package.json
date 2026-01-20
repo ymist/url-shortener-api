@@ -4,14 +4,17 @@
 	"description": "This project is url shortener.",
 	"main": "app.ts",
 	"type": "module",
+	"imports": {
+		"#src/*": "./src/*"
+	},
 	"directories": {
 		"test": "test"
 	},
 	"scripts": {
-		"test": "node ./node_modules/vitest/vitest.mjs run",
-		"test:watch": "node ./node_modules/vitest/vitest.mjs",
-		"test:coverage": "node ./node_modules/vitest/vitest.mjs run --coverage",
-		"test:ui": "node ./node_modules/vitest/vitest.mjs --ui",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"test:ui": "vitest --ui",
 		"start": "npm run build:ts && fastify start -l info dist/app.js",
 		"build:ts": "tsc",
 		"watch:ts": "tsc -w",
@@ -52,6 +55,7 @@
 		"ts-node": "^1.7.1",
 		"typescript": "~5.9.2",
 		"typescript-eslint": "^8.53.0",
+		"vite-tsconfig-paths": "^6.0.4",
 		"vitest": "^4.0.17"
 	}
 }

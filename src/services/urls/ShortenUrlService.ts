@@ -1,6 +1,6 @@
-import { generateSlug } from '../../utils/generateSlug.js';
-import { IUrlRepository } from '../../repositories/interfaces/IUrlRepository.js';
-import { ICacheProvider } from '../../cache/interfaces/ICacheProvider.js';
+import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
+import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
+import { generateSlug } from '#src/utils/generateSlug';
 
 export class ShortenUrlService {
 	constructor(

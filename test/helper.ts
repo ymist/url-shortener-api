@@ -1,22 +1,18 @@
 // This file contains code that we reuse between our tests.
-import * as path from 'node:path';
-import helper from 'fastify-cli/helper.js';
+// Note: We manually register routes instead of using @fastify/autoload
+// because autoload uses Node.js dynamic imports which bypass Vitest's TS transformation
+import Fastify from 'fastify';
+import urlRoutes from '#src/routes/urls/routes';
 
-const AppPath = path.join(__dirname, '..', 'src', 'app.ts');
-
-// Fill in this config with all the configurations
-// needed for testing the application
-function config() {
-	return {
-		skipOverride: true, // Register our application with fastify-plugin
-	};
-}
-
-// Automatically build and tear down our instance
 async function build() {
-	const argv = [AppPath];
-	const app = await helper.build(argv, config());
-	return app;
+	const fastify = Fastify();
+
+	// Health check for tests
+	fastify.get('/', async () => ({ status: 'ok' }));
+
+	await fastify.register(urlRoutes, { prefix: '/urls' });
+	await fastify.ready();
+	return fastify;
 }
 
-export { config, build };
+export { build };

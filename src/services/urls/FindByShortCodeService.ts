@@ -1,5 +1,5 @@
-import { ICacheProvider } from '../../cache/interfaces/ICacheProvider.js';
-import { IUrlRepository } from '../../repositories/interfaces/IUrlRepository.js';
+import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
+import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
 
 export class FindByShortCodeService {
 	constructor(

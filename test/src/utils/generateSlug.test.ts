@@ -1,5 +1,5 @@
+import { decodeSlug, generateSlug } from '#src/utils/generateSlug';
 import { it, expect, describe } from 'vitest';
-import { decodeSlug, generateSlug } from '../../src/utils/generateSlug.js';
 
 describe('Geração de slug', () => {
 	it('Deve retornar shortcode com 5 caracteres', () => {

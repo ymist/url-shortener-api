@@ -1,6 +1,6 @@
+import { createUrlSchema } from '#src/schemas/urlSchemas';
+import { ShortenUrlService } from '#src/services/urls/ShortenUrlService';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { ShortenUrlService } from '../../services/urls/ShortenUrlService.js';
-import { createUrlSchema } from '../../schemas/urlSchemas.js';
 
 export class ShortenUrlController {
 	constructor(private shortenUrlService: ShortenUrlService) {}

@@ -1,6 +1,6 @@
+import { shortcodeSchema } from '#src/schemas/urlSchemas';
+import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { FindByShortCodeService } from '../../services/urls/FindByShortCodeService.js';
-import { shortcodeSchema } from '../../schemas/urlSchemas.js';
 
 export class FindByShortCodeController {
 	constructor(private findByShortCodeService: FindByShortCodeService) {}
