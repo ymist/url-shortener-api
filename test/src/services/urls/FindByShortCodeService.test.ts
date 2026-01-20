@@ -3,7 +3,6 @@ import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
 import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
 import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
 
-
 describe('FindByShortCode Service', () => {
 	let findByShortCode: FindByShortCodeService;
 	let mockRepository: IUrlRepository;
@@ -74,6 +73,6 @@ describe('FindByShortCode Service', () => {
 	it('Deve lançar erro quando URL não existe', async () => {
 		(mockCache.get as Mock).mockResolvedValue(null);
 		(mockRepository.findByShortcode as Mock).mockResolvedValue(null);
-		expect(findByShortCode.execute('abc123')).rejects.toThrow('URL not found');
+		await expect(findByShortCode.execute('abc123')).rejects.toThrow('URL not found');
 	});
 });
