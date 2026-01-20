@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"rootDir": "./",
+		"rootDir": "./src",
 		"outDir": "./dist",
 		"types": ["vitest/globals"],
 
@@ -32,6 +32,6 @@
 
 		// ----------------------------------------------
 	},
-	"include": ["src/**/*", "test/**/*"],
-	"exclude": ["node_modules", "test", "dist"]
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
 }
