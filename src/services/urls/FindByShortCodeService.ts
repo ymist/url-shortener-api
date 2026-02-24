@@ -24,7 +24,9 @@ export class FindByShortCodeService {
 		const urlData = await this.urlRepository.findByShortcode(shortcode);
 
 		if (!urlData) {
-			throw new Error('URL not found');
+			const err = new Error('URL not found');
+			(err as Error & { statusCode: number }).statusCode = 404;
+			throw err;
 		}
 
 		await this.cacheProvider.set(`url:${shortcode}`, JSON.stringify(urlData), 86400);

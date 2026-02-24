@@ -73,10 +73,12 @@ describe('FindByShortCode Service', () => {
 		expect(mockCache.set).toHaveBeenCalledWith('url:abc12', cachedData, 86400);
 	});
 
-	it('Deve lançar erro quando URL não existe', async () => {
+	it('Deve lançar erro 404 quando URL não existe', async () => {
 		(mockCache.get as Mock).mockResolvedValue(null);
 		(mockRepository.findByShortcode as Mock).mockResolvedValue(null);
 
-		await expect(findByShortCode.execute('abc12')).rejects.toThrow('URL not found');
+		const err = await findByShortCode.execute('abc12').catch((e: unknown) => e as Error & { statusCode: number });
+		expect(err.message).toBe('URL not found');
+		expect(err.statusCode).toBe(404);
 	});
 });

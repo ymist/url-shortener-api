@@ -5,7 +5,7 @@ export const createUrlSchema = z.object({
 });
 
 export const shortcodeSchema = z.object({
-	shortcode: z.string().length(5),
+	shortcode: z.string().min(1).max(20),
 });
 
 export type CreateUrlInput = z.infer<typeof createUrlSchema>;
