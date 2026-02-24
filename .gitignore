@@ -69,3 +69,6 @@ dist
 .env
 
 /generated
+
+# git worktrees
+.worktrees
