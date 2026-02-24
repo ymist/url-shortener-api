@@ -26,19 +26,18 @@ export default defineConfig({
 			provider: 'v8',
 			reporter: ['text', 'json', 'html', 'lcov'],
 			reportsDirectory: './coverage',
-			include: ['src/**/*.ts'],
+			// CLAUDE.md: foco nos services onde está a lógica
+			include: ['src/services/**/*.ts', 'src/utils/**/*.ts'],
 			exclude: [
 				'src/**/*.test.ts',
 				'src/**/*.spec.ts',
-				'src/app.ts', // Entry point, muito fino para testar
-				'dist/**',
 			],
 			// Thresholds mínimos de 70% conforme CLAUDE.md
 			thresholds: {
-				statements: 20,
-				branches: 20,
-				functions: 20,
-				lines: 20,
+				statements: 70,
+				branches: 70,
+				functions: 70,
+				lines: 70,
 			},
 		},
 

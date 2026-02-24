@@ -1,30 +1,34 @@
-import { ICacheProvider } from '#src/cache/interfaces/ICacheProvider';
-import { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository';
+import type { ICacheProvider } from '#src/cache/interfaces/ICacheProvider.js';
+import type { IUrlRepository } from '#src/repositories/interfaces/IUrlRepository.js';
+
+interface UrlData {
+	id: string;
+	long_url: string;
+	user_id: string | null;
+}
 
 export class FindByShortCodeService {
 	constructor(
 		private urlRepository: IUrlRepository,
-		private cacheProvider: ICacheProvider, // tipagem depois
+		private cacheProvider: ICacheProvider,
 	) {}
-	async execute(shortcode: string) {
-		// TODO: Validação com Zod
 
-		const cacheMap = await this.cacheProvider.get(`url:${shortcode}`);
+	async execute(shortcode: string): Promise<UrlData> {
+		const cached = await this.cacheProvider.get(`url:${shortcode}`);
 
-		if (cacheMap) {
-			await this.cacheProvider.set(`url:${shortcode}`, cacheMap, 86400);
-			return { long_url: cacheMap };
+		if (cached) {
+			await this.cacheProvider.set(`url:${shortcode}`, cached, 86400);
+			return JSON.parse(cached) as UrlData;
 		}
 
-		const urlMap = await this.urlRepository.findByShortcode(shortcode);
+		const urlData = await this.urlRepository.findByShortcode(shortcode);
 
-		if (!urlMap) {
+		if (!urlData) {
 			throw new Error('URL not found');
 		}
 
-		// Salva no cache pra próxima
-		await this.cacheProvider.set(`url:${shortcode}`, urlMap.long_url, 86400);
+		await this.cacheProvider.set(`url:${shortcode}`, JSON.stringify(urlData), 86400);
 
-		return urlMap;
+		return urlData;
 	}
 }

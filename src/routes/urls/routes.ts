@@ -1,31 +1,41 @@
-import { RedisCacheProvider } from '#src/cache/redis/RedisCacheProvider';
-import { FindByShortCodeController } from '#src/controllers/urls/FindByShortCodeController';
-import { ShortenUrlController } from '#src/controllers/urls/ShortenUrlController';
-import { prisma } from '#src/lib/prisma';
-import { redis } from '#src/lib/redis';
-import { UrlRepository } from '#src/repositories/prisma/UrlRepository';
-import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
-import { ShortenUrlService } from '#src/services/urls/ShortenUrlService';
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import { RedisCacheProvider } from '#src/cache/redis/RedisCacheProvider.js';
+import { FindByShortCodeController } from '#src/controllers/urls/FindByShortCodeController.js';
+import { ShortenUrlController } from '#src/controllers/urls/ShortenUrlController.js';
+import { prisma } from '#src/lib/prisma.js';
+import { redis } from '#src/lib/redis.js';
+import { UrlRepository } from '#src/repositories/prisma/UrlRepository.js';
+import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService.js';
+import { ShortenUrlService } from '#src/services/urls/ShortenUrlService.js';
+import { ValidateSafeUrlService } from '#src/services/urls/ValidateSafeUrlService.js';
+import { RecordClickService } from '#src/services/analytics/RecordClickService.js';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 const urlRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 	// Setup dependencies
 	const urlRepository = new UrlRepository(prisma);
 	const cacheProvider = new RedisCacheProvider(redis);
+	const safeBrowsingValidator = new ValidateSafeUrlService(cacheProvider);
 
 	// Setup services
-	const shortenUrlService = new ShortenUrlService(urlRepository, cacheProvider);
+	const shortenUrlService = new ShortenUrlService(urlRepository, cacheProvider, safeBrowsingValidator);
 	const findByShortCodeService = new FindByShortCodeService(urlRepository, cacheProvider);
+	const recordClickService = new RecordClickService();
 
 	// Setup controllers
 	const shortenUrlController = new ShortenUrlController(shortenUrlService);
-	const findByShortCodeController = new FindByShortCodeController(findByShortCodeService);
+	const findByShortCodeController = new FindByShortCodeController(findByShortCodeService, recordClickService);
 
 	// Routes
-	fastify.post<{ Body: { long_url: string } }>('/shorten', (req, reply) => shortenUrlController.handle(req, reply));
+	fastify.post<{ Body: { long_url: string } }>(
+		'/shorten',
+		{ config: { rateLimit: { max: 30, timeWindow: '1 minute' } } },
+		(req, reply) => shortenUrlController.handle(req, reply),
+	);
 
-	fastify.get<{ Params: { shortcode: string } }>('/:shortcode', (req, reply) =>
-		findByShortCodeController.handle(req, reply),
+	fastify.get<{ Params: { shortcode: string } }>(
+		'/:shortcode',
+		{ config: { rateLimit: { max: 300, timeWindow: '1 minute' } } },
+		(req, reply) => findByShortCodeController.handle(req, reply),
 	);
 };
 

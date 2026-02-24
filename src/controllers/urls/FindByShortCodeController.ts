@@ -1,9 +1,13 @@
-import { shortcodeSchema } from '#src/schemas/urlSchemas';
-import { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { shortcodeSchema } from '#src/schemas/urlSchemas.js';
+import type { FindByShortCodeService } from '#src/services/urls/FindByShortCodeService.js';
+import type { RecordClickService } from '#src/services/analytics/RecordClickService.js';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 export class FindByShortCodeController {
-	constructor(private findByShortCodeService: FindByShortCodeService) {}
+	constructor(
+		private findByShortCodeService: FindByShortCodeService,
+		private recordClickService: RecordClickService,
+	) {}
 
 	async handle(req: FastifyRequest, reply: FastifyReply) {
 		const parsed = shortcodeSchema.safeParse(req.params);
@@ -13,6 +17,16 @@ export class FindByShortCodeController {
 		}
 
 		const result = await this.findByShortCodeService.execute(parsed.data.shortcode);
+
+		// Fire-and-forget: não bloqueia o redirect
+		this.recordClickService.execute({
+			urlId: result.id,
+			ip: req.ip,
+			userAgent: req.headers['user-agent'] ?? null,
+			referer: req.headers.referer ?? null,
+		}).catch((err) => {
+			console.error('Failed to record click:', err);
+		});
 
 		return reply.redirect(result.long_url, 302);
 	}
