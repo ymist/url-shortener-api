@@ -2,10 +2,13 @@
 // Note: We manually register routes instead of using @fastify/autoload
 // because autoload uses Node.js dynamic imports which bypass Vitest's TS transformation
 import Fastify from 'fastify';
+import authPlugin from '#src/plugins/auth';
 import urlRoutes from '#src/routes/urls/routes';
 
 async function build() {
 	const fastify = Fastify();
+
+	await fastify.register(authPlugin);
 
 	// Health check for tests
 	fastify.get('/', async () => ({ status: 'ok' }));

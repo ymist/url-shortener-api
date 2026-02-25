@@ -22,4 +22,12 @@ export class UrlRepository implements IUrlRepository {
 		});
 		return result;
 	}
+
+	async findByUserId(userId: string) {
+		return this.prisma.url.findMany({
+			where: { user_id: userId, is_active: true },
+			select: { id: true, shortcode: true, long_url: true, created_at: true, is_active: true },
+			orderBy: { created_at: 'desc' },
+		});
+	}
 }
