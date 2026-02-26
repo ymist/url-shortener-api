@@ -72,3 +72,7 @@ dist
 
 # git worktrees
 .worktrees
+
+# AI guidance
+GEMINI.md
+.claude/
