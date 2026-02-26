@@ -75,4 +75,4 @@ dist
 
 # AI guidance
 GEMINI.md
-.claude/
+.claude
